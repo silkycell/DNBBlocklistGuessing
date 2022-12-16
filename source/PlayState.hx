@@ -135,11 +135,6 @@ class PlayState extends FlxState
 			FlxG.sound.volumeUpKeys = [FlxKey.PLUS];
 			FlxG.sound.volumeDownKeys = [FlxKey.MINUS];
 		}
-
-		for (v in names)
-		{
-			guessName(v);
-		}
 	}
 
 	override public function update(elapsed:Float)

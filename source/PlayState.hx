@@ -18,6 +18,10 @@ class PlayState extends FlxState
 	var guessedNames:Array<String> = [];
 	var names:Array<String>;
 
+	var guesses:Int;
+	var guessesText:FlxText = new FlxText(0, 0, 0, "0", 60);
+	var guessesDescText:FlxText = new FlxText(0, 0, 0, "Guesses", 25);
+
 	var inputGroup:FlxSpriteGroup = new FlxSpriteGroup();
 	var canInputTwn:Bool = true;
 
@@ -28,7 +32,7 @@ class PlayState extends FlxState
 
 	var submitButton:FlxButton;
 
-	var completionAmount:FlxText = new FlxText(0, 0, 0, "0/?", 50);
+	var completionAmount:FlxText = new FlxText(0, 0, 0, "0/?", 70);
 	var at:FlxText = new FlxText(0, 0, 0, "@", 25);
 
 	var baldiTimer = new FlxTimer();
@@ -43,6 +47,19 @@ class PlayState extends FlxState
 
 		completionAmount.text = guessedNames.length + "/" + names.length;
 		completionAmount.screenCenter();
+		completionAmount.antialiasing = true;
+		add(completionAmount);
+
+		guessesText.text = Std.string(guesses);
+		guessesText.screenCenter();
+		guessesText.x -= 250;
+		guessesText.antialiasing = true;
+		add(guessesText);
+
+		guessesDescText.y = guessesText.y - 50;
+		guessesDescText.x = guessesText.x - 15;
+		guessesDescText.antialiasing = true;
+		add(guessesDescText);
 
 		input.screenCenter();
 		input.y += 150;
@@ -83,8 +100,6 @@ class PlayState extends FlxState
 			FlxG.sound.volumeUpKeys = [FlxKey.PLUS];
 			FlxG.sound.volumeDownKeys = [FlxKey.MINUS];
 		}
-
-		add(completionAmount);
 	}
 
 	override public function update(elapsed:Float)
@@ -179,6 +194,8 @@ class PlayState extends FlxState
 
 		completionAmount.text = guessedNames.length + "/" + names.length;
 		completionAmount.screenCenter();
+
+		guessesText.text = Std.string(guesses);
 	}
 
 	function notif(type:String)
@@ -211,6 +228,7 @@ class PlayState extends FlxState
 		switch type
 		{
 			case "found":
+				guesses += 1;
 				FlxG.sound.play(AssetPaths.getSoundFile("assets/sounds/correct"));
 				notifText.text = "Correct!";
 				notifText.color = FlxColor.GREEN;
@@ -220,6 +238,7 @@ class PlayState extends FlxState
 				notifText.text = "Already Guessed!";
 				notifText.color = FlxColor.YELLOW;
 			case "notInNames":
+				guesses += 1;
 				errTwn();
 				FlxG.sound.play(AssetPaths.getSoundFile("assets/sounds/incorrect"));
 				notifText.text = "Not in Blocklist!";

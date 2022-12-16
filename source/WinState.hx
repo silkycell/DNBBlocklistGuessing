@@ -30,15 +30,12 @@ class WinState extends FlxState
 			+ " times!", 30);
 		text.alignment = CENTER;
 		text.screenCenter();
-		trace(text.y);
 		text.y = 0 - text.textField.height - 50;
 		add(text);
 
 		FlxTween.tween(text, {y: 162}, 7);
 
 		FlxG.sound.playMusic(AssetPaths.getSoundFile("assets/music/win"), 1, false);
-
-		trace(time);
 	}
 
 	override public function update(elapsed:Float)

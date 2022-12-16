@@ -20,11 +20,11 @@ class PlayState extends FlxState
 	var guessedNames:Array<String> = [];
 	var names:Array<String>;
 
-	var guesses:Int;
+	var guesses:Int = 0;
 	var guessesText:FlxText = new FlxText(0, 0, 0, "0", 60);
 	var guessesDescText:FlxText = new FlxText(0, 0, 0, "Guesses", 25);
 
-	var seconds:Int;
+	var seconds:Int = 0;
 	var timerText:FlxText = new FlxText(0, 0, 0, "0:00", 60);
 	var timerDescText:FlxText = new FlxText(0, 0, 0, "Timer", 25);
 
@@ -68,7 +68,6 @@ class PlayState extends FlxState
 		guessesDescText.y -= 50;
 		guessGroup.add(guessesDescText);
 
-		timerText.text = Std.string(guesses);
 		timerText.screenCenter();
 		timerText.antialiasing = true;
 		timerGroup.add(timerText);

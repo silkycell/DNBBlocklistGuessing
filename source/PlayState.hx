@@ -18,6 +18,9 @@ class PlayState extends FlxState
 	var inputGroup:FlxSpriteGroup = new FlxSpriteGroup();
 
 	var input:FlxInputText = new FlxInputText(0, 0, 150, "", 8);
+	#if web
+	var inputHide:FlxInputText = new FlxInputText(0, 0, 150, "", 8);
+	#end
 
 	var completionAmount:FlxText = new FlxText(0, 0, 0, "0/?", 50);
 	var at:FlxText = new FlxText(0, 0, 0, "@", 25);
@@ -39,6 +42,13 @@ class PlayState extends FlxState
 		input.y += 150;
 		input.updateHitbox();
 		inputGroup.add(input);
+
+		#if web
+		inputHide.screenCenter();
+		inputHide.y += 150;
+		inputHide.updateHitbox();
+		inputGroup.add(inputHide);
+		#end
 
 		at.x = input.x - input.scale.x - 25;
 		at.screenCenter(Y);
@@ -67,6 +77,26 @@ class PlayState extends FlxState
 	override public function update(elapsed:Float)
 	{
 		super.update(elapsed);
+
+		FlxG.watch.add(input, "text");
+		FlxG.log.add(input.textField.text);
+
+		#if web
+		if (input.text == "")
+		{
+			input.visible = false;
+			inputHide.visible = true;
+			if (input.hasFocus)
+				inputHide.hasFocus = true;
+		}
+		else
+		{
+			input.visible = true;
+			inputHide.visible = false;
+			inputHide.hasFocus = false;
+		}
+		inputHide.text = "";
+		#end // thanks, haxe!
 
 		if (FlxG.keys.justPressed.ENTER)
 		{
@@ -115,7 +145,6 @@ class PlayState extends FlxState
 		else if (alreadyGuessed)
 		{
 			notif("alreadyGuessed");
-			trace(input);
 		}
 		else
 		{
@@ -147,7 +176,7 @@ class PlayState extends FlxState
 			if (baldiCount == 3)
 			{
 				baldiCount = 0;
-				FlxG.sound.play("assets/sounds/fantastic.ogg");
+				FlxG.sound.play(AssetPaths.getSoundFile("assets/sounds/fantastic"));
 				baldiTimer.cancel();
 				baldiTimerStarted = false;
 			}
@@ -156,19 +185,19 @@ class PlayState extends FlxState
 		switch type
 		{
 			case "found":
-				FlxG.sound.play("assets/sounds/correct.ogg");
+				FlxG.sound.play(AssetPaths.getSoundFile("assets/sounds/correct"));
 				notifText.text = "Correct!";
 				notifText.color = FlxColor.GREEN;
 			case "alreadyGuessed":
-				FlxG.sound.play("assets/sounds/alreadyGuess.ogg");
+				FlxG.sound.play(AssetPaths.getSoundFile("assets/sounds/alreadyGuess"));
 				notifText.text = "Already Guessed!";
 				notifText.color = FlxColor.YELLOW;
 			case "notInNames":
-				FlxG.sound.play("assets/sounds/incorrect.ogg");
+				FlxG.sound.play(AssetPaths.getSoundFile("assets/sounds/incorrect"));
 				notifText.text = "Not in Blocklist!";
 				notifText.color = FlxColor.RED;
 			case "empty":
-				FlxG.sound.play("assets/sounds/empty.ogg");
+				FlxG.sound.play(AssetPaths.getSoundFile("assets/sounds/empty"));
 				notifText.text = "You need to type something first, silly!";
 				notifText.color = FlxColor.ORANGE;
 			default:

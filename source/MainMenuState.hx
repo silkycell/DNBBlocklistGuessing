@@ -12,7 +12,7 @@ class MainMenuState extends FlxState
 
 		FlxG.autoPause = false;
 
-		var music = FlxG.sound.load("assets/music/BGM.ogg", 1, true);
+		var music = FlxG.sound.load(AssetPaths.getSoundFile("assets/music/BGM"), 1, true);
 		music.looped = true;
 		music.loopTime = 6660;
 		music.persist = true;

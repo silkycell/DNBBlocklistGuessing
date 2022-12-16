@@ -242,7 +242,7 @@ class PlayState extends FlxState
 		if (guessedNames.length == names.length)
 		{
 			MainMenuState.music.stop();
-			FlxG.switchState(new WinState(FlxStringUtil.formatTime(seconds)));
+			FlxG.switchState(new WinState(FlxStringUtil.formatTime(seconds), guesses));
 		}
 	}
 

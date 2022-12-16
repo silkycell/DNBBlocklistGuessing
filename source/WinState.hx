@@ -8,19 +8,26 @@ import flixel.tweens.FlxTween;
 class WinState extends FlxState
 {
 	var time:String;
+	var guessCount:Int;
 
-	public function new(timer:String)
+	public function new(timer:String, guesses:Int)
 	{
 		super();
 
 		time = timer;
+		guessCount = guesses;
 	}
 
 	override public function create()
 	{
 		super.create();
 
-		var text:FlxText = new FlxText(0, 0, 500, "Congratulations! You just wasted " + time + " of your life guessing fucking twitter @s!", 30);
+		var text:FlxText = new FlxText(0, 0, 500,
+			"Congratulations! You just wasted "
+			+ time
+			+ " of your life guessing fucking twitter @s "
+			+ guessCount
+			+ " times!", 30);
 		text.alignment = CENTER;
 		text.screenCenter();
 		trace(text.y);

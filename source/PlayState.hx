@@ -11,7 +11,9 @@ import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.ui.FlxButton;
 import flixel.util.FlxColor;
+import flixel.util.FlxStringUtil;
 import flixel.util.FlxTimer;
+import haxe.Timer;
 
 class PlayState extends FlxState
 {
@@ -22,7 +24,14 @@ class PlayState extends FlxState
 	var guessesText:FlxText = new FlxText(0, 0, 0, "0", 60);
 	var guessesDescText:FlxText = new FlxText(0, 0, 0, "Guesses", 25);
 
+	var seconds:Int;
+	var timerText:FlxText = new FlxText(0, 0, 0, FlxStringUtil.formatTime(0), 60);
+	var timerDescText:FlxText = new FlxText(0, 0, 0, "Timer", 25);
+
 	var inputGroup:FlxSpriteGroup = new FlxSpriteGroup();
+	var guessGroup:FlxSpriteGroup = new FlxSpriteGroup();
+	var timerGroup:FlxSpriteGroup = new FlxSpriteGroup();
+
 	var canInputTwn:Bool = true;
 
 	var input:FlxInputText = new FlxInputText(0, 0, 150, "", 8);
@@ -52,14 +61,40 @@ class PlayState extends FlxState
 
 		guessesText.text = Std.string(guesses);
 		guessesText.screenCenter();
-		guessesText.x -= 250;
 		guessesText.antialiasing = true;
-		add(guessesText);
+		guessGroup.add(guessesText);
 
-		guessesDescText.y = guessesText.y - 50;
-		guessesDescText.x = guessesText.x - 15;
-		guessesDescText.antialiasing = true;
-		add(guessesDescText);
+		guessesDescText.screenCenter();
+		guessesDescText.y -= 50;
+		guessGroup.add(guessesDescText);
+
+		timerText.text = Std.string(guesses);
+		timerText.screenCenter();
+		timerText.antialiasing = true;
+		timerGroup.add(timerText);
+
+		timerDescText.screenCenter();
+		timerDescText.y -= 50;
+		timerGroup.add(timerDescText);
+
+		guessGroup.x = -250;
+		timerGroup.x = 240;
+
+		add(guessGroup);
+		add(timerGroup);
+
+		var timer = new Timer(1000);
+		timer.run = function()
+		{
+			seconds++;
+			timerText.text = FlxStringUtil.formatTime(seconds);
+
+			timerGroup.x = 0;
+			timerDescText.screenCenter();
+			timerDescText.y -= 50;
+			timerText.screenCenter();
+			timerGroup.x = 240;
+		}
 
 		input.screenCenter();
 		input.y += 150;
@@ -196,6 +231,11 @@ class PlayState extends FlxState
 		completionAmount.screenCenter();
 
 		guessesText.text = Std.string(guesses);
+		guessGroup.x = 0;
+		guessesDescText.screenCenter();
+		guessesDescText.y -= 50;
+		guessesText.screenCenter();
+		guessGroup.x = -250;
 	}
 
 	function notif(type:String)

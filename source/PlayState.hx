@@ -167,11 +167,12 @@ class PlayState extends FlxState
 
 	function onInputTextChanged(_, type:String)
 	{
+		FlxG.sound.play(AssetPaths.getSoundFile("assets/sounds/click"), 0.5);
+
 		if (type == "input")
-		{
 			inputGroup.y = 2;
-			FlxG.sound.play(AssetPaths.getSoundFile("assets/sounds/click"), 0.5);
-		}
+		else
+			inputGroup.y = -2;
 	}
 
 	function submit()

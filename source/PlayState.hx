@@ -3,6 +3,7 @@ package;
 import flixel.FlxG;
 import flixel.FlxState;
 import flixel.addons.ui.FlxInputText;
+import flixel.input.keyboard.FlxKey;
 import flixel.text.FlxText;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
@@ -30,6 +31,20 @@ class PlayState extends FlxState
 		input.y += 150;
 		add(input);
 
+		input.focusGained = function():Void
+		{
+			FlxG.sound.muteKeys = null;
+			FlxG.sound.volumeUpKeys = null;
+			FlxG.sound.volumeDownKeys = null;
+		}
+
+		input.focusLost = function():Void
+		{
+			FlxG.sound.muteKeys = [FlxKey.ZERO];
+			FlxG.sound.volumeUpKeys = [FlxKey.PLUS];
+			FlxG.sound.volumeDownKeys = [FlxKey.MINUS];
+		}
+
 		add(completionAmount);
 	}
 
@@ -43,6 +58,8 @@ class PlayState extends FlxState
 			{
 				guessName(input.text);
 				input.text = "";
+				input.hasFocus = false;
+				input.hasFocus = true;
 			}
 			else
 			{
@@ -101,6 +118,7 @@ class PlayState extends FlxState
 		switch type
 		{
 			case "found":
+				FlxG.sound.play("assets/sounds/correct.ogg");
 				notifText.text = "Found!";
 				notifText.color = FlxColor.GREEN;
 			case "alreadyGuessed":
@@ -110,7 +128,7 @@ class PlayState extends FlxState
 				notifText.text = "Not in Blocklist!";
 				notifText.color = FlxColor.RED;
 			case "empty":
-				notifText.text = "You need to type something, silly!";
+				notifText.text = "You need to type something first, silly!";
 				notifText.color = FlxColor.ORANGE;
 			default:
 				trace("TYPE ERROR: " + type + " not found!");

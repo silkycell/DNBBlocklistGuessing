@@ -78,19 +78,16 @@ class PlayState extends FlxState
 
 		if (foundName && !alreadyGuessed)
 		{
-			trace("Found!");
 			notif("found");
 			guessedNames.push(input);
 		}
 		else if (alreadyGuessed)
 		{
 			notif("alreadyGuessed");
-			trace("Already Guessed!");
 		}
 		else
 		{
 			notif("notInNames");
-			trace("Not in names!");
 		}
 
 		completionAmount.text = guessedNames.length + "/" + names.length;
@@ -112,16 +109,19 @@ class PlayState extends FlxState
 			case "notInNames":
 				notifText.text = "Not in Blocklist!";
 				notifText.color = FlxColor.RED;
+			case "empty":
+				notifText.text = "You need to type something, silly!";
+				notifText.color = FlxColor.ORANGE;
 			default:
-				trace("TYPE ERROR! " + type + " not found!", "warning");
+				trace("TYPE ERROR: " + type + " not found!");
 				notifText.visible = false;
 		}
 
 		notifText.screenCenter();
-		notifText.y += 150;
+		notifText.y += 130;
 
 		add(notifText);
-		FlxTween.tween(notifText, {y: notifText.y - 25, alpha: 1}, 0.8, {
+		FlxTween.tween(notifText, {y: notifText.y - 25, alpha: 0}, 0.8, {
 			onComplete: function(twn:FlxTween)
 			{
 				notifText.destroy();

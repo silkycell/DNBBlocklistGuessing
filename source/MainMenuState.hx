@@ -5,6 +5,7 @@ import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.addons.ui.FlxUIButton;
 import flixel.math.FlxMath;
+import flixel.system.FlxSound;
 import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
@@ -17,6 +18,8 @@ class MainMenuState extends FlxState
 	var icon:FlxSprite;
 	var github:FlxSprite;
 
+	public static var music:FlxSound;
+
 	override public function create()
 	{
 		super.create();
@@ -28,7 +31,7 @@ class MainMenuState extends FlxState
 		text.y = -500;
 		add(text);
 
-		var music = FlxG.sound.load(AssetPaths.getSoundFile("assets/music/BGM"), 1, true);
+		music = FlxG.sound.load(AssetPaths.getSoundFile("assets/music/BGM"), 1, true);
 		music.looped = true;
 		music.loopTime = 6660;
 		music.persist = true;

@@ -135,6 +135,11 @@ class PlayState extends FlxState
 			FlxG.sound.volumeUpKeys = [FlxKey.PLUS];
 			FlxG.sound.volumeDownKeys = [FlxKey.MINUS];
 		}
+
+		for (v in names)
+		{
+			guessName(v);
+		}
 	}
 
 	override public function update(elapsed:Float)
@@ -238,6 +243,12 @@ class PlayState extends FlxState
 		guessesDescText.y -= 50;
 		guessesText.screenCenter();
 		guessGroup.x = -250;
+
+		if (guessedNames.length == names.length)
+		{
+			MainMenuState.music.stop();
+			FlxG.switchState(new WinState(FlxStringUtil.formatTime(seconds)));
+		}
 	}
 
 	function notif(type:String)

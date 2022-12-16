@@ -4,7 +4,7 @@
 
 	<!-- _________________________ Application Settings _________________________ -->
 
-	<app title="DNBBlocklistGuessing" file="DNBBlocklistGuessing" main="Main" version="0.0.1" company="HaxeFlixel" />
+	<app title="DNB Blocklist Guesser" file="DNBBlocklistGuessing" main="Main" version="0.0.1" company="Foxel" />
 
 	<!--The flixel preloader is not accurate in Chrome. You can use it regularly if you embed the swf into a html file
 		or you can set the actual size of your file manually at "FlxPreloaderBase-onUpdate-bytesTotal"-->
@@ -41,7 +41,7 @@
 	<!--<haxelib name="flixel-addons" />-->
 
 	<!--In case you want to use the ui package-->
-	<!--<haxelib name="flixel-ui" />-->
+	<haxelib name="flixel-ui" />
 
 	<!--In case you want to use nape with flixel-->
 	<!--<haxelib name="nape-haxe4" />-->

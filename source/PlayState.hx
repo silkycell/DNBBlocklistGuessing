@@ -78,9 +78,6 @@ class PlayState extends FlxState
 	{
 		super.update(elapsed);
 
-		FlxG.watch.add(input, "text");
-		FlxG.log.add(input.textField.text);
-
 		#if web
 		if (input.text == "")
 		{

@@ -30,8 +30,7 @@ class PlayState extends FlxState
 	{
 		super.create();
 
-		var content:String = sys.io.File.getContent('assets/data/blocklist.txt');
-		names = content.split(",");
+		names = BlockList.blockList.split(",");
 
 		completionAmount.text = guessedNames.length + "/" + names.length;
 		completionAmount.screenCenter();

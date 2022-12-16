@@ -25,7 +25,7 @@ class PlayState extends FlxState
 	var guessesDescText:FlxText = new FlxText(0, 0, 0, "Guesses", 25);
 
 	var seconds:Int;
-	var timerText:FlxText = new FlxText(0, 0, 0, FlxStringUtil.formatTime(0), 60);
+	var timerText:FlxText = new FlxText(0, 0, 0, "0:00", 60);
 	var timerDescText:FlxText = new FlxText(0, 0, 0, "Timer", 25);
 
 	var inputGroup:FlxSpriteGroup = new FlxSpriteGroup();
@@ -215,6 +215,8 @@ class PlayState extends FlxState
 
 		if (foundName && !alreadyGuessed)
 		{
+			if (input == "evilpassing")
+				FlxG.sound.play(AssetPaths.getSoundFile("assets/sounds/la cucaracha horn"));
 			notif("found");
 			guessedNames.push(input);
 		}

@@ -99,6 +99,7 @@ class PlayState extends FlxState
 		input.y += 150;
 		input.updateHitbox();
 		input.callback = onInputTextChanged;
+		input.maxLength = 16;
 		inputGroup.add(input);
 
 		submitButton = new FlxButton(0, 0, "Submit", submit);

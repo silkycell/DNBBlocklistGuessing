@@ -5,8 +5,11 @@ import flixel.FlxState;
 import flixel.addons.ui.FlxInputText;
 import flixel.group.FlxSpriteGroup;
 import flixel.input.keyboard.FlxKey;
+import flixel.math.FlxMath;
 import flixel.text.FlxText;
+import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
+import flixel.ui.FlxButton;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 
@@ -16,11 +19,14 @@ class PlayState extends FlxState
 	var names:Array<String>;
 
 	var inputGroup:FlxSpriteGroup = new FlxSpriteGroup();
+	var canInputTwn:Bool = true;
 
 	var input:FlxInputText = new FlxInputText(0, 0, 150, "", 8);
 	#if web
 	var inputHide:FlxInputText = new FlxInputText(0, 0, 150, "", 8);
 	#end
+
+	var submitButton:FlxButton;
 
 	var completionAmount:FlxText = new FlxText(0, 0, 0, "0/?", 50);
 	var at:FlxText = new FlxText(0, 0, 0, "@", 25);
@@ -41,7 +47,14 @@ class PlayState extends FlxState
 		input.screenCenter();
 		input.y += 150;
 		input.updateHitbox();
+		input.callback = onInputTextChanged;
 		inputGroup.add(input);
+
+		submitButton = new FlxButton(0, 0, "Submit", submit);
+		submitButton.screenCenter();
+		submitButton.y += 180;
+		submitButton.x -= 5;
+		add(submitButton);
 
 		#if web
 		inputHide.screenCenter();
@@ -95,19 +108,35 @@ class PlayState extends FlxState
 		inputHide.text = "";
 		#end // thanks, haxe!
 
+		inputGroup.y = FlxMath.lerp(inputGroup.y, 0, 0.1);
+
 		if (FlxG.keys.justPressed.ENTER)
 		{
-			if (input.text != "")
-			{
-				guessName(input.text);
-				input.text = "";
-				input.hasFocus = false;
-				input.hasFocus = true;
-			}
-			else
-			{
-				notif("empty");
-			}
+			submit();
+		}
+	}
+
+	function onInputTextChanged(_, type:String)
+	{
+		if (type == "input")
+		{
+			inputGroup.y = 2;
+			FlxG.sound.play(AssetPaths.getSoundFile("assets/sounds/click"), 0.5);
+		}
+	}
+
+	function submit()
+	{
+		if (input.text != "")
+		{
+			guessName(input.text);
+			input.text = "";
+			input.hasFocus = false;
+			input.hasFocus = true;
+		}
+		else
+		{
+			notif("empty");
 		}
 	}
 
@@ -186,14 +215,17 @@ class PlayState extends FlxState
 				notifText.text = "Correct!";
 				notifText.color = FlxColor.GREEN;
 			case "alreadyGuessed":
+				errTwn();
 				FlxG.sound.play(AssetPaths.getSoundFile("assets/sounds/alreadyGuess"));
 				notifText.text = "Already Guessed!";
 				notifText.color = FlxColor.YELLOW;
 			case "notInNames":
+				errTwn();
 				FlxG.sound.play(AssetPaths.getSoundFile("assets/sounds/incorrect"));
 				notifText.text = "Not in Blocklist!";
 				notifText.color = FlxColor.RED;
 			case "empty":
+				errTwn();
 				FlxG.sound.play(AssetPaths.getSoundFile("assets/sounds/empty"));
 				notifText.text = "You need to type something first, silly!";
 				notifText.color = FlxColor.ORANGE;
@@ -212,5 +244,32 @@ class PlayState extends FlxState
 				notifText.destroy();
 			}
 		});
+	}
+
+	function errTwn()
+	{
+		if (canInputTwn)
+		{
+			canInputTwn = false;
+			FlxTween.tween(inputGroup, {x: 5}, 0.2, {
+				ease: FlxEase.quadIn,
+				onComplete: function(twn:FlxTween)
+				{
+					FlxTween.tween(inputGroup, {x: -5}, 0.2, {
+						ease: FlxEase.quadOut,
+						onComplete: function(twn:FlxTween)
+						{
+							FlxTween.tween(inputGroup, {x: 0}, 0.2, {
+								ease: FlxEase.quadInOut,
+								onComplete: function(twn:FlxTween)
+								{
+									canInputTwn = true;
+								}
+							});
+						}
+					});
+				}
+			});
+		}
 	}
 }
